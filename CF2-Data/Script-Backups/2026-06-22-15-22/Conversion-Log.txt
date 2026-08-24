@@ -1,0 +1,57 @@
+Converting script [1 / 7]	[\3rdPerson+Fly\Scripts\LevelScripts\ControlsTutorial.cs]
+	Fragments : 10
+		[ 0] : Line:   34	InputMethod   GetMouseButtonDown  	(0)
+		[ 1] : Line:   34	InputMethod   GetMouseButtonDown  	(1)
+		[ 2] : Line:   36	Other mod.	[Cursor.lockState]
+		[ 3] : Line:   37	Other mod.	[Cursor.visible]
+		[ 4] : Line:   39	InputMethod   GetKeyDown          	(KeyCode.Escape)
+		[ 5] : Line:   41	Other mod.	[Cursor.lockState]
+		[ 6] : Line:   42	Other mod.	[Cursor.visible]
+		[ 7] : Line:   44	InputMethod   GetKey              	(KeyCode.F2)
+		[ 8] : Line:   45	InputMethod   GetKey              	(KeyCode.F3)
+		[ 9] : Line:   45	InputMethod   GetKey              	(KeyCode.Joystick1Button7)
+
+Converting script [2 / 7]	[\3rdPerson+Fly\Scripts\LevelScripts\HintManagement.cs]
+	Fragments : 1
+		[ 0] : Line:   42	InputMethod   GetKeyDown          	(changeMessageKey)
+
+Converting script [3 / 7]	[\3rdPerson+Fly\Scripts\LevelScripts\ThirdPersonOrbitCamBasic.cs]
+	Fragments : 4
+		[ 0] : Line:   61	InputMethod   GetAxis             	("Mouse X")
+		[ 1] : Line:   62	InputMethod   GetAxis             	("Mouse Y")
+		[ 2] : Line:   64	InputMethod   GetAxis             	(XAxis)
+		[ 3] : Line:   65	InputMethod   GetAxis             	(YAxis)
+
+Converting script [4 / 7]	[\3rdPerson+Fly\Scripts\PlayerScripts\AimBehaviourBasic.cs]
+	Fragments : 3
+		[ 0] : Line:   27	InputMethod   GetAxisRaw          	(aimButton)
+		[ 1] : Line:   31	InputMethod   GetAxisRaw          	(aimButton)
+		[ 2] : Line:   40	InputMethod   GetButtonDown       	(shoulderButton)
+
+Converting script [5 / 7]	[\3rdPerson+Fly\Scripts\PlayerScripts\BasicBehaviour.cs]
+	Fragments : 3
+		[ 0] : Line:   66	InputMethod   GetAxis             	("Horizontal")
+		[ 1] : Line:   67	InputMethod   GetAxis             	("Vertical")
+		[ 2] : Line:   74	InputMethod   GetButton           	(sprintButton)
+
+Converting script [6 / 7]	[\3rdPerson+Fly\Scripts\PlayerScripts\FlyBehaviour.cs]
+	Fragments : 1
+		[ 0] : Line:   29	InputMethod   GetButtonDown       	(flyButton)
+
+Converting script [7 / 7]	[\3rdPerson+Fly\Scripts\PlayerScripts\MoveBehaviour.cs]
+	Fragments : 2
+		[ 0] : Line:   39	InputMethod   GetButtonDown       	(jumpButton)
+		[ 1] : Line:  121	InputMethod   GetAxis             	("Mouse ScrollWheel")
+
+
+7 scripts modified!
+Overwriting actual scripts...
+	[0 / 7] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-22\Assets-After/\3rdPerson+Fly\Scripts\LevelScripts\ControlsTutorial.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\LevelScripts\ControlsTutorial.cs]
+	[1 / 7] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-22\Assets-After/\3rdPerson+Fly\Scripts\LevelScripts\HintManagement.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\LevelScripts\HintManagement.cs]
+	[2 / 7] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-22\Assets-After/\3rdPerson+Fly\Scripts\LevelScripts\ThirdPersonOrbitCamBasic.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\LevelScripts\ThirdPersonOrbitCamBasic.cs]
+	[3 / 7] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-22\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\AimBehaviourBasic.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\AimBehaviourBasic.cs]
+	[4 / 7] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-22\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\BasicBehaviour.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\BasicBehaviour.cs]
+	[5 / 7] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-22\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\FlyBehaviour.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\FlyBehaviour.cs]
+	[6 / 7] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-22\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\MoveBehaviour.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\MoveBehaviour.cs]
+
+Overwriting COMPLETED!

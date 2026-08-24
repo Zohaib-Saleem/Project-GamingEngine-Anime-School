@@ -1,0 +1,14 @@
+Converting script [1 / 1]	[\SimpleBikeControl\Scripts\InputManager.cs]
+	Fragments : 5
+		[ 0] : Line:   17	InputMethod   GetAxis             	("Horizontal")
+		[ 1] : Line:   18	InputMethod   GetAxis             	("Vertical")
+		[ 2] : Line:   20	InputMethod   GetKeyDown          	(enterExitKey)
+		[ 3] : Line:   22	InputMethod   GetKeyDown          	(speedUpKey)
+		[ 4] : Line:   23	InputMethod   GetKeyUp            	(speedUpKey)
+
+
+1 scripts modified!
+Overwriting actual scripts...
+	[0 / 1] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-23-15-56\Assets-After/\SimpleBikeControl\Scripts\InputManager.cs] to [E:/School-Simulator(Anime)/Assets/\SimpleBikeControl\Scripts\InputManager.cs]
+
+Overwriting COMPLETED!

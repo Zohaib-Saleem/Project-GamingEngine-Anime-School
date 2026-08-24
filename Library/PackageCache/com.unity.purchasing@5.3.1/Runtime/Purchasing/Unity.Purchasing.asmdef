@@ -1,0 +1,30 @@
+{
+  "name": "Unity.Purchasing",
+  "rootNamespace": "",
+  "references": [
+    "Unity.Services.Core",
+    "Unity.Services.Core.Environments",
+    "Unity.Services.Core.Internal",
+    "Unity.Purchasing.Security",
+    "Unity.Purchasing.SecurityStub",
+    "Unity.Purchasing.SecurityCore",
+    "Unity.Purchasing.Utilities",
+    "Unity.Purchasing.TransactionVerifier",
+    "Unity.Microsoft.GDK"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.microsoft.gdk",
+      "expression": "1.4.5",
+      "define": "IAP_GDK"
+    }
+  ],
+  "noEngineReferences": false
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "289570873537",
+    "project_id": "engine-anime-high-school",
+    "storage_bucket": "engine-anime-high-school.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289570873537:android:ae57b930d7f8c4e4e0f440",
+        "android_client_info": {
+          "package_name": "com.engine.anime.high.school.girl.games"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Qps73RMktVl6Sq7uh1GUMewJImyeKNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

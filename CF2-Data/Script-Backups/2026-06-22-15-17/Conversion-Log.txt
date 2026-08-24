@@ -1,0 +1,38 @@
+Converting script [1 / 5]	[\3rdPerson+Fly\Scripts\LevelScripts\ThirdPersonOrbitCamBasic.cs]
+	Fragments : 4
+		[ 0] : Line:   61	InputMethod   GetAxis             	("Mouse X")
+		[ 1] : Line:   62	InputMethod   GetAxis             	("Mouse Y")
+		[ 2] : Line:   64	InputMethod   GetAxis             	(XAxis)
+		[ 3] : Line:   65	InputMethod   GetAxis             	(YAxis)
+
+Converting script [2 / 5]	[\3rdPerson+Fly\Scripts\PlayerScripts\AimBehaviourBasic.cs]
+	Fragments : 3
+		[ 0] : Line:   27	InputMethod   GetAxisRaw          	(aimButton)
+		[ 1] : Line:   31	InputMethod   GetAxisRaw          	(aimButton)
+		[ 2] : Line:   40	InputMethod   GetButtonDown       	(shoulderButton)
+
+Converting script [3 / 5]	[\3rdPerson+Fly\Scripts\PlayerScripts\BasicBehaviour.cs]
+	Fragments : 3
+		[ 0] : Line:   66	InputMethod   GetAxis             	("Horizontal")
+		[ 1] : Line:   67	InputMethod   GetAxis             	("Vertical")
+		[ 2] : Line:   74	InputMethod   GetButton           	(sprintButton)
+
+Converting script [4 / 5]	[\3rdPerson+Fly\Scripts\PlayerScripts\FlyBehaviour.cs]
+	Fragments : 1
+		[ 0] : Line:   29	InputMethod   GetButtonDown       	(flyButton)
+
+Converting script [5 / 5]	[\3rdPerson+Fly\Scripts\PlayerScripts\MoveBehaviour.cs]
+	Fragments : 2
+		[ 0] : Line:   39	InputMethod   GetButtonDown       	(jumpButton)
+		[ 1] : Line:  121	InputMethod   GetAxis             	("Mouse ScrollWheel")
+
+
+5 scripts modified!
+Overwriting actual scripts...
+	[0 / 5] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-17\Assets-After/\3rdPerson+Fly\Scripts\LevelScripts\ThirdPersonOrbitCamBasic.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\LevelScripts\ThirdPersonOrbitCamBasic.cs]
+	[1 / 5] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-17\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\AimBehaviourBasic.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\AimBehaviourBasic.cs]
+	[2 / 5] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-17\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\BasicBehaviour.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\BasicBehaviour.cs]
+	[3 / 5] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-17\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\FlyBehaviour.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\FlyBehaviour.cs]
+	[4 / 5] from  [E:/School-Simulator(Anime)/CF2-Data/Script-Backups/2026-06-22-15-17\Assets-After/\3rdPerson+Fly\Scripts\PlayerScripts\MoveBehaviour.cs] to [E:/School-Simulator(Anime)/Assets/\3rdPerson+Fly\Scripts\PlayerScripts\MoveBehaviour.cs]
+
+Overwriting COMPLETED!
