@@ -1,0 +1,35 @@
+# Unity generated folders
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/Backups/
+
+# IDE and Unity-generated project files (root only)
+.vs/
+.vscode/
+.idea/
+/*.csproj
+/*.sln
+/*.unityproj
+*.suo
+*.user
+*.userprefs
+*.opendb
+*.VC.db
+
+# Build output and crash reports
+/*.apk
+/*.aab
+sysinfo.txt
+crashlytics-build.properties
+.gradle/
+
+# OS
+.DS_Store
+Thumbs.db

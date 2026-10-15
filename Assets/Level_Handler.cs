@@ -22,6 +22,10 @@ public class Level_Handler : MonoBehaviour
         public bool hasMathTest;
         [Tooltip("Turn on school interior at mission start (for indoor missions like lab).")]
         public bool startInsideSchool;
+        [Tooltip("Start this mission in the bedroom environment. Level 0 always starts there for backwards compatibility.")]
+        public bool startInMyRoom;
+        [Tooltip("Keep the bicycle available for this mission even when it is after the original bike level.")]
+        public bool allowBike;
         public int RewardAmount;
         public float levelTime;
         [Tooltip("Same index as LeveltaskParticle. Shown in the single hint text.")]
@@ -46,6 +50,19 @@ public class Level_Handler : MonoBehaviour
     Coroutine taskCutsceneWatch;
 
     LevelSpawnPoint CurrentLevel => levelSpawnPoints[levelNo];
+
+    // Read by ObjectiveHUD / TaskPathGuide.
+    public int CurrentTaskIndex => taskparticle_index;
+    public int TaskCount => GetTaskCount();
+    public bool IsGuiding => gameplayStarted && !taskBusy && !isTaskCutscene;
+    public Transform CurrentTarget
+    {
+        get
+        {
+            GameObject point = GetTaskPoint(taskparticle_index);
+            return point != null ? point.transform : null;
+        }
+    }
 
     private void Awake()
     {
@@ -117,17 +134,17 @@ public class Level_Handler : MonoBehaviour
         taskBusy = false;
         SetCutsceneMode();
 
-        switch(levelNo)
+        bool useMyRoom = levelNo == 0 || CurrentLevel.startInMyRoom;
+        if (useMyRoom)
         {
-            case 0:
-                MyRoom.SetActive(true);
-                AnimeSchoolManager.Sun.SetActive(false);
-                break;
-            default:
-                if (MyRoom != null)
-                    MyRoom.SetActive(false);
-                AnimeSchoolManager.Sun.SetActive(true);
-                break;
+            MyRoom.SetActive(true);
+            AnimeSchoolManager.Sun.SetActive(false);
+        }
+        else
+        {
+            if (MyRoom != null)
+                MyRoom.SetActive(false);
+            AnimeSchoolManager.Sun.SetActive(true);
         }
 
         for (int i = 0; i < levelSpawnPoints.Length; i++)
@@ -138,7 +155,7 @@ public class Level_Handler : MonoBehaviour
 
         Result_Manager.instance.RewardAmount = CurrentLevel.RewardAmount;
 
-        if (levelNo >= 2)
+        if (levelNo >= 2 && !CurrentLevel.allowBike)
             AnimeSchoolManager.DisableBike();
 
         if (CurrentLevel.startInsideSchool && SchoolZoneManager.instance != null)
