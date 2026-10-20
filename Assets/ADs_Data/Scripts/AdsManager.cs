@@ -50,6 +50,8 @@ public class AdsManager : MonoBehaviour
     public bool pausebuttonad = true;
     [Tooltip("Remote Config: removeadspanelad — interstitial after closing Remove Ads panel.")]
     public bool removeadspanelad = true;
+    [Tooltip("Remote Config: firstmissioncompletead — interstitial after skipping 2x on the first level-select mission only.")]
+    public bool firstmissioncompletead = true;
     [FormerlySerializedAs("UseOnlyADMobBanner")]
     [HideInInspector]
     public bool UseOnlyADMobAppOpen, RatedInThisSession;

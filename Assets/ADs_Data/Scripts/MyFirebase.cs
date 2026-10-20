@@ -16,15 +16,15 @@ public class MyFirebase : MonoBehaviour
 #if UNITY_IOS || Use_RemoteConfing_Android
     public string adSwitchFirebasestring, AdMobBannerADSwitchstring, AdMobMRECADSwitchstring, AdMobInterstitialADSwitchstring, ADMobAppOpenADSwitchstring
         , MAXBannerADSwitchstring, MAXMRECADSwitchstring, MAXInterstitialADSwitchstring, MAXAppOpenADSwitchstring, AdsTimerString,
-       showAppOpenOnMaxInterFallBackString, dailyrewardbackadstring = "dailyrewardbackad", beforemainmenustring = "beforemainmenu",
-       mainmenustartadstring = "mainmenustartad", modeselectionadstring = "modeselectionad", levelselectadstring = "levelselectad",
-       pausebuttonadstring = "pausebuttonad", removeadspaneladstring = "removeadspanelad";
+       showAppOpenOnMaxInterFallBackString, dailyrewardbackadstring , beforemainmenustring ,
+       mainmenustartadstring, modeselectionadstring , levelselectadstring ,
+       pausebuttonadstring , removeadspaneladstring , firstmissioncompleteadstring ;
 #endif
 #if UNITY_IOS || Use_RemoteConfing_Android
     public bool adSwitchFirebase, AdMobBannerADSwitch, AdMobMRECADSwitch, AdMobInterstitialADSwitch, ADMobAppOpenADSwitch
         , MAXBannerADSwitch, MAXMRECADSwitch, MAXInterstitialADSwitch, MAXAppOpenADSwitch, AdsTimerSwitch
-        , showAppOpenOnMaxInterFallBack, dailyrewardbackad = true, beforemainmenu = true
-        , mainmenustartad = true, modeselectionad = true, levelselectad = true, pausebuttonad = true, removeadspanelad = true;
+        , showAppOpenOnMaxInterFallBack, dailyrewardbackad, beforemainmenu
+        , mainmenustartad, modeselectionad, levelselectad, pausebuttonad, removeadspanelad, firstmissioncompletead;
 #endif
 
 
@@ -62,13 +62,13 @@ public class MyFirebase : MonoBehaviour
             adsData.MAXInterstitialADSwitch = true;
             adsData.MAXAppOpenADSwitch = true;
             adsData.Adtimers = false;
-            adsData.dailyrewardbackad = true;
-            adsData.beforemainmenu = true;
-            adsData.mainmenustartad = true;
-            adsData.modeselectionad = true;
-            adsData.levelselectad = true;
-            adsData.pausebuttonad = true;
-            adsData.removeadspanelad = true;
+            //adsData.dailyrewardbackad = true;
+            //adsData.beforemainmenu = true;
+            //adsData.mainmenustartad = true;
+            //adsData.modeselectionad = true;
+            //adsData.levelselectad = true;
+            //adsData.pausebuttonad = true;
+            //adsData.removeadspanelad = true;
 #endif
 
         }
@@ -108,7 +108,8 @@ public class MyFirebase : MonoBehaviour
             { "modeselectionad", true },
             { "levelselectad", true },
             { "pausebuttonad", true },
-            { "removeadspanelad", true }
+            { "removeadspanelad", true },
+            { "firstmissioncompletead", true }
         };
 
         try
@@ -154,45 +155,51 @@ public class MyFirebase : MonoBehaviour
 
             MAXInterstitialADSwitch = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(MAXInterstitialADSwitchstring).BooleanValue;
             adsData.MAXInterstitialADSwitch = MAXInterstitialADSwitch;
-
+           
             MAXAppOpenADSwitch = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(MAXAppOpenADSwitchstring).BooleanValue;
             adsData.MAXAppOpenADSwitch = MAXAppOpenADSwitch;
-
-            AdsTimerSwitch = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(AdsTimerString).BooleanValue;
-            adsData.Adtimers = AdsTimerSwitch;
-
+           
+            //AdsTimerSwitch = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(AdsTimerString).BooleanValue;
+            //adsData.Adtimers = AdsTimerSwitch;
            
 
-            showAppOpenOnMaxInterFallBack= Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(showAppOpenOnMaxInterFallBackString).BooleanValue;
-            adsData.showAppOpenOnMaxInterFallBack = showAppOpenOnMaxInterFallBack;
 
-            string dailyKey = string.IsNullOrEmpty(dailyrewardbackadstring) ? "dailyrewardbackad" : dailyrewardbackadstring;
+            showAppOpenOnMaxInterFallBack = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(showAppOpenOnMaxInterFallBackString).BooleanValue;
+            adsData.showAppOpenOnMaxInterFallBack = showAppOpenOnMaxInterFallBack;
+         
+            string dailyKey = /*string.IsNullOrEmpty(dailyrewardbackadstring) ? "dailyrewardbackad" :*/ dailyrewardbackadstring;
             dailyrewardbackad = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(dailyKey).BooleanValue;
             adsData.dailyrewardbackad = dailyrewardbackad;
-
-            string beforeMenuKey = string.IsNullOrEmpty(beforemainmenustring) ? "beforemainmenu" : beforemainmenustring;
+           
+            string beforeMenuKey = /*string.IsNullOrEmpty(beforemainmenustring) ? "beforemainmenu" : */beforemainmenustring;
             beforemainmenu = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(beforeMenuKey).BooleanValue;
             adsData.beforemainmenu = beforemainmenu;
-
-            string startKey = string.IsNullOrEmpty(mainmenustartadstring) ? "mainmenustartad" : mainmenustartadstring;
+           
+            string startKey = /*string.IsNullOrEmpty(mainmenustartadstring) ? "mainmenustartad" :*/ mainmenustartadstring;
             mainmenustartad = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(startKey).BooleanValue;
             adsData.mainmenustartad = mainmenustartad;
 
-            string modeKey = string.IsNullOrEmpty(modeselectionadstring) ? "modeselectionad" : modeselectionadstring;
+            string modeKey =/* string.IsNullOrEmpty(modeselectionadstring) ? "modeselectionad" :*/ modeselectionadstring;
             modeselectionad = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(modeKey).BooleanValue;
             adsData.modeselectionad = modeselectionad;
 
-            string levelKey = string.IsNullOrEmpty(levelselectadstring) ? "levelselectad" : levelselectadstring;
+            string levelKey =/* string.IsNullOrEmpty(*/levelselectadstring/*) ? "levelselectad" : levelselectadstring*/;
             levelselectad = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(levelKey).BooleanValue;
             adsData.levelselectad = levelselectad;
 
-            string pauseKey = string.IsNullOrEmpty(pausebuttonadstring) ? "pausebuttonad" : pausebuttonadstring;
+            string pauseKey =/* string.IsNullOrEmpty(pausebuttonadstring) ? "pausebuttonad" :*/ pausebuttonadstring;
+           
             pausebuttonad = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(pauseKey).BooleanValue;
+           
             adsData.pausebuttonad = pausebuttonad;
 
-            string removeAdsKey = string.IsNullOrEmpty(removeadspaneladstring) ? "removeadspanelad" : removeadspaneladstring;
+            string removeAdsKey = /*string.IsNullOrEmpty(removeadspaneladstring) ? "removeadspanelad" :*/ removeadspaneladstring;
             removeadspanelad = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(removeAdsKey).BooleanValue;
             adsData.removeadspanelad = removeadspanelad;
+
+            string firstMissionKey = firstmissioncompleteadstring;
+            firstmissioncompletead = Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.GetValue(firstMissionKey).BooleanValue;
+            adsData.firstmissioncompletead = firstmissioncompletead;
 
             
 
@@ -214,13 +221,13 @@ public class MyFirebase : MonoBehaviour
             adsData.MAXInterstitialADSwitch = true;
             adsData.MAXAppOpenADSwitch = true;
             adsData.Adtimers = false;
-            adsData.dailyrewardbackad = true;
-            adsData.beforemainmenu = true;
-            adsData.mainmenustartad = true;
-            adsData.modeselectionad = true;
-            adsData.levelselectad = true;
-            adsData.pausebuttonad = true;
-            adsData.removeadspanelad = true;
+            //adsData.dailyrewardbackad = true;
+            //adsData.beforemainmenu = true;
+            //adsData.mainmenustartad = true;
+            //adsData.modeselectionad = true;
+            //adsData.levelselectad = true;
+            //adsData.pausebuttonad = true;
+            //adsData.removeadspanelad = true;
 #endif
 #endif
 
@@ -247,13 +254,13 @@ public class MyFirebase : MonoBehaviour
             adsData.MAXInterstitialADSwitch = true;
             adsData.MAXAppOpenADSwitch = true;
             adsData.Adtimers = false;
-            adsData.dailyrewardbackad = true;
-            adsData.beforemainmenu = true;
-            adsData.mainmenustartad = true;
-            adsData.modeselectionad = true;
-            adsData.levelselectad = true;
-            adsData.pausebuttonad = true;
-            adsData.removeadspanelad = true;
+            //adsData.dailyrewardbackad = true;
+            //adsData.beforemainmenu = true;
+            //adsData.mainmenustartad = true;
+            //adsData.modeselectionad = true;
+            //adsData.levelselectad = true;
+            //adsData.pausebuttonad = true;
+            //adsData.removeadspanelad = true;
 #endif
         }
         else if (fetchTask.IsCompleted)
@@ -286,13 +293,13 @@ public class MyFirebase : MonoBehaviour
                 adsData.MAXMRECADSwitch = true;
                 adsData.MAXInterstitialADSwitch = true;
                 adsData.MAXAppOpenADSwitch = true;
-                adsData.dailyrewardbackad = true;
-                adsData.beforemainmenu = true;
-                adsData.mainmenustartad = true;
-                adsData.modeselectionad = true;
-                adsData.levelselectad = true;
-                adsData.pausebuttonad = true;
-                adsData.removeadspanelad = true;
+                //adsData.dailyrewardbackad = true;
+                //adsData.beforemainmenu = true;
+                //adsData.mainmenustartad = true;
+                //adsData.modeselectionad = true;
+                //adsData.levelselectad = true;
+                //adsData.pausebuttonad = true;
+                //adsData.removeadspanelad = true;
 #endif
 
                 break;

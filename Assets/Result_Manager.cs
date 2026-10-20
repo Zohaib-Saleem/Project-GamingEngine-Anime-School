@@ -16,6 +16,11 @@ public class Result_Manager : MonoBehaviour
     public RewardPopupUI levelRewardPopup;
     public bool showLevelRewardPopup = true;
     public int timeBonusAmount = 500;
+    [Header("Home Button")]
+    [Tooltip("Off = home buttons on complete/fail panels are hidden for this build")]
+    public bool showHomeButton = false;
+    [Tooltip("Optional, if empty any child named \"Home\" under the panels is hidden")]
+    public GameObject completeHomeButton, failHomeButton;
     public bool Completed, failed;
     public Text LevelReward, TimeReward, TotalReward;
     public int RewardAmount;
@@ -81,6 +86,7 @@ public class Result_Manager : MonoBehaviour
             rewardButtonsRoot.SetActive(true);
         if (nextButtonsRoot != null)
             nextButtonsRoot.SetActive(false);
+        ApplyHomeButtonVisibility(LevelCompletePanel, completeHomeButton);
 
         // Optional old popup flow stays disabled when in-panel reward buttons are set.
         if (showLevelRewardPopup && levelRewardPopup != null && rewardButtonsRoot == null)
@@ -124,7 +130,19 @@ public class Result_Manager : MonoBehaviour
         // Next buttons panel first, then interstitial
         ShowNextButtons();
         if (adsController.instance != null)
-            adsController.instance.ShowInter();
+        {
+            if (IsFirstMissionFromArray())
+                adsController.instance.ShowFirstMissionCompleteInter();
+            else
+                adsController.instance.ShowInter();
+        }
+    }
+
+    bool IsFirstMissionFromArray()
+    {
+        if (Level_Handler.instance != null)
+            return Level_Handler.instance.selectionLevelNo == 0;
+        return PlayerPrefs.GetInt("SelectedLevel", 0) == 0;
     }
 
     void ShowNextButtons()
@@ -133,6 +151,25 @@ public class Result_Manager : MonoBehaviour
             rewardButtonsRoot.SetActive(false);
         if (nextButtonsRoot != null)
             nextButtonsRoot.SetActive(true);
+        ApplyHomeButtonVisibility(LevelCompletePanel, completeHomeButton);
+    }
+
+    void ApplyHomeButtonVisibility(GameObject panel, GameObject homeButton)
+    {
+        if (homeButton != null)
+        {
+            homeButton.SetActive(showHomeButton);
+            return;
+        }
+        if (panel == null)
+            return;
+
+        // no button assigned, hide any button under the panel whose name contains "home"
+        foreach (Button button in panel.GetComponentsInChildren<Button>(true))
+        {
+            if (button.name.ToLower().Contains("home"))
+                button.gameObject.SetActive(showHomeButton);
+        }
     }
 
     void UpdateTotalRewardUI(int total)
@@ -192,5 +229,6 @@ public class Result_Manager : MonoBehaviour
             LvlFailBar.SetActive(false);
         if (LevelFailPanel != null)
             LevelFailPanel.SetActive(true);
+        ApplyHomeButtonVisibility(LevelFailPanel, failHomeButton);
     }
 }

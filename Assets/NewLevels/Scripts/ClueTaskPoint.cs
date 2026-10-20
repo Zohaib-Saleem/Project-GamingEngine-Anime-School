@@ -14,6 +14,7 @@ public class ClueTaskPoint : MonoBehaviour
     {
         public string speaker;
         [TextArea] public string text;
+        public AudioClip voice;
     }
 
     public Line[] lines;
@@ -91,6 +92,11 @@ public class ClueSpeech : MonoBehaviour
     float timer;
     Action onDone;
     Text speakerText, lineText;
+    bool useSceneBubbles;
+    bool releasedBubbles;
+    AudioSource voiceSource;
+    int voiceLine = -1;
+    bool musicDucked;
 
     public static void Show(ClueTaskPoint.Line[] lines, float perLine, float cps, Color speakerColor, Action onDone)
     {
@@ -103,6 +109,7 @@ public class ClueSpeech : MonoBehaviour
         current.perLine = Mathf.Max(1f, perLine);
         current.cps = Mathf.Max(5f, cps);
         current.onDone = onDone;
+        current.SetMusicDuck(true);
         current.Build(speakerColor);
     }
 
@@ -110,10 +117,12 @@ public class ClueSpeech : MonoBehaviour
     {
         timer += Time.deltaTime;
         ClueTaskPoint.Line l = lines[index];
+        PlayLineVoice();
 
-        // Tap after the line is fully typed skips to the next one.
-        bool typed = timer * cps >= l.text.Length;
-        if (timer >= perLine || (typed && timer > 0.6f && Input.GetMouseButtonDown(0)))
+        float hold = LineHold(l);
+        float rate = TypeRate(l);
+        bool typed = timer * rate >= l.text.Length;
+        if (timer >= hold || (typed && timer > 0.6f && Input.GetMouseButtonDown(0)))
         {
             timer = 0f;
             index++;
@@ -123,16 +132,79 @@ public class ClueSpeech : MonoBehaviour
                 return;
             }
             l = lines[index];
+            PlayLineVoice();
+            hold = LineHold(l);
+            rate = TypeRate(l);
         }
 
+        string shown = l.text.Substring(0, Mathf.Min(l.text.Length, Mathf.FloorToInt(timer * rate)));
+        if (useSceneBubbles)
+        {
+            MissionSpeechBubbles.Show(l.speaker, shown);
+            return;
+        }
         speakerText.text = l.speaker;
-        lineText.text = l.text.Substring(0, Mathf.Min(l.text.Length, Mathf.FloorToInt(timer * cps)));
+        lineText.text = shown;
+    }
+
+    float LineHold(ClueTaskPoint.Line l)
+    {
+        if (l != null && l.voice != null && l.voice.length > 0.08f)
+            return l.voice.length + 0.15f;
+        return perLine;
+    }
+
+    float TypeRate(ClueTaskPoint.Line l)
+    {
+        if (l == null || string.IsNullOrEmpty(l.text))
+            return cps;
+        float dur = l.voice != null && l.voice.length > 0.08f ? l.voice.length : perLine;
+        dur = Mathf.Max(0.35f, dur * 0.92f);
+        return l.text.Length / dur;
+    }
+
+    void PlayLineVoice()
+    {
+        if (voiceLine == index)
+            return;
+        voiceLine = index;
+        if (voiceSource == null)
+            voiceSource = gameObject.AddComponent<AudioSource>();
+        voiceSource.playOnAwake = false;
+        voiceSource.spatialBlend = 0f;
+        voiceSource.loop = false;
+        voiceSource.Stop();
+        if (index < 0 || index >= lines.Length || lines[index] == null || lines[index].voice == null)
+            return;
+        voiceSource.clip = lines[index].voice;
+        voiceSource.Play();
+    }
+
+    void StopVoice()
+    {
+        voiceLine = -1;
+        if (voiceSource != null)
+            voiceSource.Stop();
+    }
+
+    void SetMusicDuck(bool on)
+    {
+        if (musicDucked == on)
+            return;
+        musicDucked = on;
+        if (on)
+            UIClickSound.BeginDialogueDuck();
+        else
+            UIClickSound.EndDialogueDuck();
     }
 
     void Finish()
     {
         Action done = onDone;
         onDone = null;
+        StopVoice();
+        SetMusicDuck(false);
+        ReleaseBubbles();
         Destroy(gameObject);
         current = null;
         if (done != null)
@@ -141,12 +213,30 @@ public class ClueSpeech : MonoBehaviour
 
     private void OnDestroy()
     {
+        StopVoice();
+        SetMusicDuck(false);
+        ReleaseBubbles();
         if (current == this)
             current = null;
     }
 
+    void ReleaseBubbles()
+    {
+        if (!useSceneBubbles || releasedBubbles)
+            return;
+        releasedBubbles = true;
+        MissionSpeechBubbles.Release();
+    }
+
     void Build(Color speakerColor)
     {
+        if (MissionSpeechBubbles.Available)
+        {
+            useSceneBubbles = true;
+            MissionSpeechBubbles.Retain();
+            return;
+        }
+
         Font font = Level_Handler.instance != null && Level_Handler.instance.HintText != null && Level_Handler.instance.HintText.font != null
             ? Level_Handler.instance.HintText.font
             : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");

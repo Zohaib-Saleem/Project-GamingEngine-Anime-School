@@ -29,19 +29,7 @@ public class SchoolZoneManager : MonoBehaviour
             SchoolNPCAmbience.instance.ShowIndoor();
     }
 
-    public void EnterSchool()
-    {
-        if (Exterior != null)
-            Exterior.SetActive(false);
-        if (Interior != null)
-            Interior.SetActive(true);
-        if (SchoolNPCAmbience.instance != null)
-            SchoolNPCAmbience.instance.ShowIndoor();
-
-        Teleport(InsidePlayerSpawn, InsideCameraSpawn);
-    }
-
-    public void ExitSchool()
+    public void ShowExterior()
     {
         if (Interior != null)
             Interior.SetActive(false);
@@ -49,7 +37,17 @@ public class SchoolZoneManager : MonoBehaviour
             Exterior.SetActive(true);
         if (SchoolNPCAmbience.instance != null)
             SchoolNPCAmbience.instance.ShowOutdoor();
+    }
 
+    public void EnterSchool()
+    {
+        ShowInterior();
+        Teleport(InsidePlayerSpawn, InsideCameraSpawn);
+    }
+
+    public void ExitSchool()
+    {
+        ShowExterior();
         Teleport(OutsidePlayerSpawn, OutsideCameraSpawn);
     }
 

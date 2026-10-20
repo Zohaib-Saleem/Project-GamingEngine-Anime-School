@@ -50,6 +50,13 @@ public class UIClickSound : MonoBehaviour
     Coroutine musicRoutine;
     readonly HashSet<int> hookedButtonIds = new HashSet<int>();
     Coroutine hookRoutine;
+    int dialogueDuckCount;
+    float musicGain;
+    float musicGainTarget;
+    float duckReleaseAt = -1f;
+    const float DialogueMusicVolume = 0.1f;
+    const float DuckFadeSeconds = 0.18f;
+    const float DuckHoldSeconds = 0.22f;
 
     void Awake()
     {
@@ -78,6 +85,8 @@ public class UIClickSound : MonoBehaviour
         musicA = CreateMusicSource("MusicA");
         musicB = CreateMusicSource("MusicB");
         musicActive = musicA;
+        musicGain = musicVolume;
+        musicGainTarget = musicVolume;
     }
 
     AudioSource CreateMusicSource(string childName)
@@ -164,10 +173,53 @@ public class UIClickSound : MonoBehaviour
 
     void Update()
     {
+        TickDialogueDuck();
         if (!autoHookButtons || Time.frameCount % 30 != 0)
             return;
 
         HookAllButtonsInScene();
+    }
+
+    public static void BeginDialogueDuck()
+    {
+        if (Instance != null)
+            Instance.PushDialogueDuck();
+    }
+
+    public static void EndDialogueDuck()
+    {
+        if (Instance != null)
+            Instance.PopDialogueDuck();
+    }
+
+    void PushDialogueDuck()
+    {
+        dialogueDuckCount++;
+        duckReleaseAt = -1f;
+        musicGainTarget = DialogueMusicVolume;
+    }
+
+    void PopDialogueDuck()
+    {
+        dialogueDuckCount = Mathf.Max(0, dialogueDuckCount - 1);
+        if (dialogueDuckCount == 0)
+            duckReleaseAt = Time.unscaledTime + DuckHoldSeconds;
+    }
+
+    void TickDialogueDuck()
+    {
+        if (dialogueDuckCount == 0 && duckReleaseAt >= 0f && Time.unscaledTime >= duckReleaseAt)
+        {
+            musicGainTarget = musicVolume;
+            duckReleaseAt = -1f;
+        }
+
+        float step = Time.unscaledDeltaTime / Mathf.Max(0.05f, DuckFadeSeconds);
+        musicGain = Mathf.MoveTowards(musicGain, musicGainTarget, step);
+        if (musicRoutine != null)
+            return;
+        if (musicActive != null && musicActive.isPlaying)
+            musicActive.volume = musicGain;
     }
 
     public void PlayClick()
@@ -298,13 +350,14 @@ public class UIClickSound : MonoBehaviour
         {
             t += Time.unscaledDeltaTime;
             float p = Mathf.Clamp01(t / fade);
-            incoming.volume = musicVolume * p;
+            incoming.volume = musicGainTarget * p;
             if (outgoing != null && outgoing.isPlaying)
                 outgoing.volume = outStart * (1f - p);
             yield return null;
         }
 
-        incoming.volume = musicVolume;
+        incoming.volume = musicGainTarget;
+        musicGain = musicGainTarget;
         if (outgoing != null)
         {
             outgoing.Stop();

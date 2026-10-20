@@ -20,6 +20,8 @@ public class Level_Handler : MonoBehaviour
         public GameObject[] TaskCutscenes;
         [Tooltip("If true, after last task/cutscene a math test opens instead of instant complete.")]
         public bool hasMathTest;
+        [Tooltip("Which MathTest_Manager.testSets entry to show (0 = original quiz, 1 = Mission 7, …).")]
+        public int mathTestSetIndex;
         [Tooltip("Turn on school interior at mission start (for indoor missions like lab).")]
         public bool startInsideSchool;
         [Tooltip("Start this mission in the bedroom environment. Level 0 always starts there for backwards compatibility.")]
@@ -30,6 +32,14 @@ public class Level_Handler : MonoBehaviour
         public float levelTime;
         [Tooltip("Same index as LeveltaskParticle. Shown in the single hint text.")]
         [TextArea] public string[] LevelHints;
+        [Tooltip("Optional item held by the player (assign a bottle/prop). Enabled after a task cutscene, hidden when a later task is reached.")]
+        public GameObject playerCarryItem;
+        [Tooltip("Task index whose cutscene, when it finishes, enables playerCarryItem. -1 = never.")]
+        public int showCarryAfterTask = -1;
+        [Tooltip("Task index that hides playerCarryItem when the player reaches it. -1 = never.")]
+        public int hideCarryOnReachTask = -1;
+        [Tooltip("If true, playerCarryItem is visible as soon as the mission starts (after the intro).")]
+        public bool showCarryAtStart;
     }
 
     public LevelSpawnPoint[] levelSpawnPoints;
@@ -114,6 +124,7 @@ public class Level_Handler : MonoBehaviour
             AnimeSchoolManager.mainCh.SetActive(true);
             AnimeSchoolManager.mainChCamera.SetActive(true);
             AnimeSchoolManager.mainChUI.SetActive(true);
+            SetCutsceneChromeVisible(true);
         }
         else
         {
@@ -121,6 +132,27 @@ public class Level_Handler : MonoBehaviour
             AnimeSchoolManager.mainCh.SetActive(false);
             AnimeSchoolManager.mainChCamera.SetActive(false);
             AnimeSchoolManager.mainChUI.SetActive(false);
+            SetCutsceneChromeVisible(false);
+        }
+    }
+
+    void SetCutsceneChromeVisible(bool visible)
+    {
+        if (AnimeSchoolManager == null || AnimeSchoolManager.mainChUI == null)
+            return;
+        Transform panel = AnimeSchoolManager.mainChUI.transform.parent;
+        if (panel == null)
+            return;
+
+        Transform pause = panel.Find("PauseBtn");
+        if (pause != null)
+            pause.gameObject.SetActive(visible);
+
+        for (int i = 0; i < panel.childCount; i++)
+        {
+            Transform child = panel.GetChild(i);
+            if (child != null && child.name.StartsWith("CASHBar"))
+                child.gameObject.SetActive(visible);
         }
     }
     public void ActiveLevelLoading()
@@ -158,8 +190,23 @@ public class Level_Handler : MonoBehaviour
         if (levelNo >= 2 && !CurrentLevel.allowBike)
             AnimeSchoolManager.DisableBike();
 
-        if (CurrentLevel.startInsideSchool && SchoolZoneManager.instance != null)
-            SchoolZoneManager.instance.ShowInterior();
+        // Outdoor missions must force Exterior on — otherwise only skybox shows during the intro cutscene.
+        if (SchoolZoneManager.instance != null)
+        {
+            if (CurrentLevel.startInsideSchool)
+                SchoolZoneManager.instance.ShowInterior();
+            else if (!useMyRoom)
+                SchoolZoneManager.instance.ShowExterior();
+        }
+
+        if (levelNo >= 2)
+        {
+            CostumeSelection costumes = AnimeSchoolManager != null
+                ? AnimeSchoolManager.mainCh.GetComponentInChildren<CostumeSelection>(true)
+                : null;
+            if (costumes != null && PlayerPrefs.GetInt("Selectedcostume", 0) < 1)
+                costumes.SelectCostume(1);
+        }
 
         PlayLevelCutscene();
         if (CurrentLevel.Cutscene == null)
@@ -265,6 +312,8 @@ public class Level_Handler : MonoBehaviour
             fader.HideImmediate();
         EnablePlayerCamera();
         UIClickSound.PlayMusic(BgMusicType.Gameplay);
+        if (CurrentLevel.showCarryAfterTask == taskparticle_index)
+            SetCarryItemVisible(true);
 
         if (lastTask && !CurrentLevel.hasMathTest)
             CompleteIt();
@@ -333,7 +382,43 @@ public class Level_Handler : MonoBehaviour
         }
 
         EnableCurrentTaskArrow();
+        HideAllCarryItems();
+        if (CurrentLevel.showCarryAtStart)
+            SetCarryItemVisible(true);
     }
+
+    Transform GetPlayerTransform()
+    {
+        return AnimeSchoolManager != null && AnimeSchoolManager.mainCh != null
+            ? AnimeSchoolManager.mainCh.transform
+            : null;
+    }
+
+    void HideAllCarryItems()
+    {
+        Transform player = GetPlayerTransform();
+        if (player != null)
+            HandProp.HideAll(player);
+        if (levelSpawnPoints == null)
+            return;
+        for (int i = 0; i < levelSpawnPoints.Length; i++)
+        {
+            if (levelSpawnPoints[i] != null && levelSpawnPoints[i].playerCarryItem != null)
+                levelSpawnPoints[i].playerCarryItem.SetActive(false);
+        }
+    }
+
+    void SetCarryItemVisible(bool visible)
+    {
+        if (CurrentLevel.playerCarryItem == null)
+            return;
+        Transform player = GetPlayerTransform();
+        if (player != null)
+            HandProp.SetNamed(player, visible, CurrentLevel.playerCarryItem.name);
+        else
+            CurrentLevel.playerCarryItem.SetActive(visible);
+    }
+
     int GetTaskCount()
     {
         if (CurrentLevel.LeveltaskParticle == null)
@@ -455,6 +540,8 @@ public class Level_Handler : MonoBehaviour
             return;
 
         taskBusy = true;
+        if (CurrentLevel.hideCarryOnReachTask == taskparticle_index)
+            SetCarryItemVisible(false);
 
         GameObject current = GetTaskPoint(taskparticle_index);
         if (current != null && !IsBikeObject(current))

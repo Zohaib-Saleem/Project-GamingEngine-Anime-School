@@ -17,6 +17,7 @@ public class BicycleOrbitCam : MonoBehaviour
 	private float angleH = 0;                                          // Float to store camera horizontal angle related to mouse movement.
 	private float angleV = 0;                                          // Float to store camera vertical angle related to mouse movement.
 	private Transform cam;                                             // This transform.
+	private Camera camComponent;                                       // Cached camera component.
 	private Vector3 smoothPivotOffset;                                 // Camera current pivot offset on interpolation.
 	private Vector3 smoothCamOffset;                                   // Camera current offset on interpolation.
 	private Vector3 targetPivotOffset;                                 // Camera pivot offset target to interpolate.
@@ -53,7 +54,8 @@ public class BicycleOrbitCam : MonoBehaviour
         // Set up references and default values.
         smoothPivotOffset = pivotOffset;
 		smoothCamOffset = camOffset;
-		defaultFOV = cam.GetComponent<Camera>().fieldOfView;
+		camComponent = cam.GetComponent<Camera>();
+		defaultFOV = camComponent.fieldOfView;
 		angleH = player.eulerAngles.y;
 
 		ResetTargetOffsets ();
@@ -102,7 +104,11 @@ public class BicycleOrbitCam : MonoBehaviour
 
             if (autoFollowPlayer && autoFollowTimer <= 0f)
             {
-                float targetAngle = player.eulerAngles.y;
+                // use the flattened forward so bike lean/tilt can't flip the heading
+                Vector3 flatForward = Vector3.ProjectOnPlane(player.forward, Vector3.up);
+                float targetAngle = flatForward.sqrMagnitude > 0.001f
+                    ? Mathf.Atan2(flatForward.x, flatForward.z) * Mathf.Rad2Deg
+                    : angleH;
 
                 angleH = Mathf.LerpAngle(
                     angleH,
@@ -116,7 +122,7 @@ public class BicycleOrbitCam : MonoBehaviour
 		cam.rotation = aimRotation;
 
 		// Set FOV.
-		cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp (cam.GetComponent<Camera>().fieldOfView, targetFOV,  Time.deltaTime);
+		camComponent.fieldOfView = Mathf.Lerp (camComponent.fieldOfView, targetFOV,  Time.deltaTime);
 
 		// Test for collision with the environment based on current camera position.
 		Vector3 baseTempPosition = player.position + camYRotation * targetPivotOffset;

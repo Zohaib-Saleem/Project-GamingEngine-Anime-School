@@ -19,8 +19,8 @@ namespace KikiNgao.SimpleBikeControl
 
             enterExitVehicle = ControlFreak2.CF2Input.GetKeyDown(enterExitKey);
 
-            if (ControlFreak2.CF2Input.GetKeyDown(speedUpKey)) speedUp = true;
-            if (ControlFreak2.CF2Input.GetKeyUp(speedUpKey)) speedUp = false;
+            // read the held state every frame so a missed key-up can't leave speed up stuck on
+            speedUp = ControlFreak2.CF2Input.GetKey(speedUpKey);
         }
 
     }

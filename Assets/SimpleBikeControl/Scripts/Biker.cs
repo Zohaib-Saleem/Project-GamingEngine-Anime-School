@@ -64,10 +64,16 @@ namespace KikiNgao.SimpleBikeControl
             if (inputManager.vertical == 1) standPoint.position = pendalPoint.position;
         }
 
-        private void FixedUpdate()
+        // key down is only true for one frame, so it must be read in Update or it can be missed
+        private void Update()
         {
             if (!currentBike) return;
             if (!enterExitLock && inputManager.enterExitVehicle) EnterExitBike();
+        }
+
+        private void FixedUpdate()
+        {
+            if (!currentBike) return;
             if (riding) RidingBike();
         }
 

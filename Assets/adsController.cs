@@ -106,4 +106,11 @@ public class adsController : MonoBehaviour
             return;
         TryShowInter(adsManager.removeadspanelad);
     }
+
+    public void ShowFirstMissionCompleteInter()
+    {
+        if (adsManager == null)
+            return;
+        TryShowInter(adsManager.firstmissioncompletead);
+    }
 }
