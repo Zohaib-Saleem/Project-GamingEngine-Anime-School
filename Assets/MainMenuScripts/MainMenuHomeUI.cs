@@ -86,42 +86,49 @@ public class MainMenuHomeUI : MonoBehaviour
 
     void OnStart()
     {
+        AnalyticsEvents.Log("BF_MainMenu_Start_Click");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OpenModeSelect();
     }
 
     void OnSettings()
     {
+        AnalyticsEvents.Log("BF_MainMenu_Settings_Open");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OpenSettings();
     }
 
     void OnExit()
     {
+        AnalyticsEvents.Log("BF_MainMenu_Exit_Open");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OpenExitPanel();
     }
 
     void OnDailyReward()
     {
+        AnalyticsEvents.Log("BF_MainMenu_DailyReward_Open");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OpenDailyReward();
     }
 
     void OnProfile()
     {
+        AnalyticsEvents.Log("BF_MainMenu_Profile_Open");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OpenProfile();
     }
 
     void OnStore()
     {
+        AnalyticsEvents.Log("BF_MainMenu_Store_Open");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OpenStore();
     }
 
     void OnWatchVideo()
     {
+        AnalyticsEvents.Log("BF_MainMenu_WatchVideo_Click");
         // Placeholder until ad SDK — direct reward panel (same as store/daily).
         int reward = Mathf.Max(0, watchVideoReward);
         if (reward <= 0)
@@ -129,6 +136,7 @@ public class MainMenuHomeUI : MonoBehaviour
 
         if (rewardPopup != null)
         {
+            rewardPopup.analyticsScreen = "MainMenu";
             rewardPopup.ShowDoubleOrSkip(reward, null);
             return;
         }

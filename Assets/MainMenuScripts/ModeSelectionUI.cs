@@ -25,12 +25,14 @@ public class ModeSelectionUI : MonoBehaviour
 
     void OnOpenWorld()
     {
+        AnalyticsEvents.Log("BF_ModeSelection_OpenWorld_Click");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OpenLevelSelect();
     }
 
     void OnBack()
     {
+        AnalyticsEvents.Log("BF_ModeSelection_Back_Click");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.BackFromModeSelect();
     }

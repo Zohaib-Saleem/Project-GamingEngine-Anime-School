@@ -84,7 +84,14 @@ public class Level_Handler : MonoBehaviour
     }
     private void Start()
     {
+        AnalyticsEvents.Log("GF_8_GamePlay_Open");
         StartLevelCutScene();
+    }
+
+    // MF_[MenuLevelNumber]_[MissionName]_[Action], levels after 10 reuse the name of the mission they replay
+    public void LogMissionEvent(string action)
+    {
+        AnalyticsEvents.Log("MF_" + (selectionLevelNo + 1) + "_" + AnalyticsEvents.MissionName(levelNo) + "_" + action);
     }
     private void OnDestroy()
     {
@@ -186,6 +193,7 @@ public class Level_Handler : MonoBehaviour
         }
 
         Result_Manager.instance.RewardAmount = CurrentLevel.RewardAmount;
+        LogMissionEvent("Start");
 
         if (levelNo >= 2 && !CurrentLevel.allowBike)
             AnimeSchoolManager.DisableBike();
@@ -540,6 +548,7 @@ public class Level_Handler : MonoBehaviour
             return;
 
         taskBusy = true;
+        LogMissionEvent("Task" + (taskparticle_index + 1) + "_Done");
         if (CurrentLevel.hideCarryOnReachTask == taskparticle_index)
             SetCarryItemVisible(false);
 
@@ -722,6 +731,7 @@ public class Level_Handler : MonoBehaviour
     }
     public void NextLevel()
     {
+        AnalyticsEvents.Log("BF_LevelComplete_Next_Click");
         fader.FadeIn();
         Invoke(nameof(GoNextLevel), 0.5f);
     }
@@ -781,8 +791,11 @@ public class Level_Handler : MonoBehaviour
             SpawnPlayerInlevel();
         fader.FadeOut();
     }
+    // called by the result panels' restart buttons
     public void Restartlevel()
     {
+        bool fromFail = Result_Manager.instance != null && Result_Manager.instance.failed;
+        AnalyticsEvents.Log(fromFail ? "BF_LevelFail_Restart_Click" : "BF_LevelComplete_Restart_Click");
         if (PauseMenu.instance != null)
             PauseMenu.instance.Restart();
     }

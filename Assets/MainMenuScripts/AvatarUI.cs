@@ -50,7 +50,11 @@ public class AvatarUI : MonoBehaviour
 
             int index = i;
             avatarButtons[i].onClick.RemoveAllListeners();
-            avatarButtons[i].onClick.AddListener(() => SelectAvatar(index));
+            avatarButtons[i].onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_MainMenu_Avatar" + (index + 1) + "_Select");
+                SelectAvatar(index);
+            });
         }
     }
 
@@ -76,6 +80,7 @@ public class AvatarUI : MonoBehaviour
 
     void OnSave()
     {
+        AnalyticsEvents.Log("BF_MainMenu_Avatar_Save");
         AvatarData.RegisterSprites(avatarSprites);
         AvatarData.Save(selectedIndex);
 

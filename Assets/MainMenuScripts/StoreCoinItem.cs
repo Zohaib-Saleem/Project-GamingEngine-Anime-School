@@ -8,10 +8,12 @@ public class StoreCoinItem : MonoBehaviour
     public Button claimButton;
 
     StoreUI owner;
+    int packIndex;
 
-    public void Bind(StoreUI store)
+    public void Bind(StoreUI store, int index)
     {
         owner = store;
+        packIndex = index;
         if (claimButton != null)
         {
             claimButton.onClick.RemoveAllListeners();
@@ -24,6 +26,7 @@ public class StoreCoinItem : MonoBehaviour
 
     void OnClaim()
     {
+        AnalyticsEvents.Log("BF_Store_CoinPack" + (packIndex + 1) + "_Claim");
         if (owner != null)
             owner.ClaimCoinsPack(coinAmount);
     }

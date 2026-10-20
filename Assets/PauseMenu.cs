@@ -43,32 +43,56 @@ public class PauseMenu : MonoBehaviour
         if (resumeButton != null)
         {
             resumeButton.onClick.RemoveAllListeners();
-            resumeButton.onClick.AddListener(Resume);
+            resumeButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_GamePlay_Resume_Click");
+                Resume();
+            });
         }
         if (restartButton != null)
         {
             restartButton.onClick.RemoveAllListeners();
-            restartButton.onClick.AddListener(Restart);
+            restartButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_GamePlay_Restart_Click");
+                Restart();
+            });
         }
         if (homeButton != null)
         {
             homeButton.onClick.RemoveAllListeners();
-            homeButton.onClick.AddListener(Home);
+            homeButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_GamePlay_Home_Click");
+                Home();
+            });
         }
         if (gfxLowButton != null)
         {
             gfxLowButton.onClick.RemoveAllListeners();
-            gfxLowButton.onClick.AddListener(() => GameSettings.SetGraphics(0, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight));
+            gfxLowButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_GamePlay_GfxLow_Select");
+                GameSettings.SetGraphics(0, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight);
+            });
         }
         if (gfxMediumButton != null)
         {
             gfxMediumButton.onClick.RemoveAllListeners();
-            gfxMediumButton.onClick.AddListener(() => GameSettings.SetGraphics(1, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight));
+            gfxMediumButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_GamePlay_GfxMedium_Select");
+                GameSettings.SetGraphics(1, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight);
+            });
         }
         if (gfxHighButton != null)
         {
             gfxHighButton.onClick.RemoveAllListeners();
-            gfxHighButton.onClick.AddListener(() => GameSettings.SetGraphics(2, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight));
+            gfxHighButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_GamePlay_GfxHigh_Select");
+                GameSettings.SetGraphics(2, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight);
+            });
         }
         if (soundSlider != null)
         {
@@ -99,6 +123,7 @@ public class PauseMenu : MonoBehaviour
         if (fakeLoading != null && fakeLoading.activeSelf)
             return;
 
+        AnalyticsEvents.Log("BF_GamePlay_Pause_Click");
         paused = true;
         if (pausePanel != null)
             pausePanel.SetActive(true);

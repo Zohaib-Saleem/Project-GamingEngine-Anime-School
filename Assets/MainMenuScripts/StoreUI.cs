@@ -33,17 +33,29 @@ public class StoreUI : MonoBehaviour
         if (closeButton != null)
         {
             closeButton.onClick.RemoveAllListeners();
-            closeButton.onClick.AddListener(Close);
+            closeButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_Store_Close_Click");
+                Close();
+            });
         }
         if (coinsTabButton != null)
         {
             coinsTabButton.onClick.RemoveAllListeners();
-            coinsTabButton.onClick.AddListener(ShowCoinsTab);
+            coinsTabButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_Store_CoinsTab_Click");
+                ShowCoinsTab();
+            });
         }
         if (videosTabButton != null)
         {
             videosTabButton.onClick.RemoveAllListeners();
-            videosTabButton.onClick.AddListener(ShowVideosTab);
+            videosTabButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_Store_VideosTab_Click");
+                ShowVideosTab();
+            });
         }
 
         BindCoinItems();
@@ -65,7 +77,7 @@ public class StoreUI : MonoBehaviour
         for (int i = 0; i < coinItems.Length; i++)
         {
             if (coinItems[i] != null)
-                coinItems[i].Bind(this);
+                coinItems[i].Bind(this, i);
         }
     }
 
@@ -134,7 +146,8 @@ public class StoreUI : MonoBehaviour
 
         if (adsController.instance != null && adsController.instance.adsManager != null)
         {
-            adsController.instance.adsManager.ShowRewardedWithLoading(
+            adsController.instance.ShowRewarded(
+                "AF_Store_Video" + (index + 1),
                 () => OnStoreVideoWatched(reward, total),
                 false);
             return;
@@ -147,6 +160,7 @@ public class StoreUI : MonoBehaviour
     {
         if (rewardPopup != null)
         {
+            rewardPopup.analyticsScreen = "Store";
             rewardPopup.ShowDoubleOrSkip(reward, () =>
             {
                 StoreVideoData.CompleteCurrent(total);
@@ -167,6 +181,7 @@ public class StoreUI : MonoBehaviour
 
         if (rewardPopup != null)
         {
+            rewardPopup.analyticsScreen = "Store";
             rewardPopup.ShowDoubleOrSkip(amount, null);
             return;
         }

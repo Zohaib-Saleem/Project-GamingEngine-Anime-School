@@ -17,12 +17,17 @@ public class RemoveAdsUI : MonoBehaviour
             closeButton.onClick.RemoveAllListeners();
             closeButton.onClick.AddListener(OnClose);
         }
+
+        // buy is handled by the IAP button in the scene, only add tracking without removing it
+        if (buyButton != null)
+            buyButton.onClick.AddListener(() => AnalyticsEvents.Log("BF_ModeSelection_RemoveAdsBuy_Click"));
         // Do not clear buyButton listeners — wire IAP on that button in Inspector.
         // On purchase success, call OnRemoveAdsInAppPurchased.
     }
 
     void OnClose()
     {
+        AnalyticsEvents.Log("BF_ModeSelection_RemoveAds_Close");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OnRemoveAdsPanelClosed();
         else
@@ -35,6 +40,7 @@ public class RemoveAdsUI : MonoBehaviour
     /// </summary>
     public void OnRemoveAdsInAppPurchased()
     {
+        AnalyticsEvents.Log("BF_ModeSelection_RemoveAds_Purchase");
         PlayerPrefs.SetInt("RemoveAds", 1);
         PlayerPrefs.Save();
 

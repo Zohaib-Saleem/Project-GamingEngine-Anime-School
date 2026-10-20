@@ -358,7 +358,7 @@ public class MathTest_Manager : MonoBehaviour
 
         if (adsController.instance != null)
         {
-            adsController.instance.ShowRewarded(ApplyAutoFill, false);
+            adsController.instance.ShowRewarded("AF_MathTest_AutoFill", ApplyAutoFill, false);
             return;
         }
 
@@ -443,6 +443,7 @@ public class MathTest_Manager : MonoBehaviour
         if (!active || !AllQuestionsAnswered())
             return;
 
+        AnalyticsEvents.Log("BF_MathTest_Submit_Click");
         int correctCount = 0;
         for (int i = 0; i < questions.Length; i++)
         {

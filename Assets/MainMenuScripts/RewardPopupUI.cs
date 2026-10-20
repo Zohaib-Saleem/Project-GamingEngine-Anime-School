@@ -16,6 +16,9 @@ public class RewardPopupUI : MonoBehaviour
     public Button doubleRewardButton;
     public Button noThanksButton;
 
+    // screen name used in analytics events, set by whoever opens the popup
+    [NonSerialized] public string analyticsScreen = "MainMenu";
+
     PopupMode mode = PopupMode.SimpleCollect;
     int sessionAmount;
     int pendingReward;
@@ -134,7 +137,7 @@ public class RewardPopupUI : MonoBehaviour
 
         if (adsController.instance != null && adsController.instance.adsManager != null)
         {
-            adsController.instance.adsManager.ShowRewardedWithLoading(OnRewardedAdSuccess, false);
+            adsController.instance.ShowRewarded("AF_" + analyticsScreen + "_DoubleReward", OnRewardedAdSuccess, false);
             return;
         }
 
@@ -154,6 +157,7 @@ public class RewardPopupUI : MonoBehaviour
         if (waitingForCollect || rewardGranted)
             return;
 
+        AnalyticsEvents.Log("BF_" + analyticsScreen + "_NoThanks_Click");
         GoToCollectStep(false);
     }
 
@@ -161,6 +165,8 @@ public class RewardPopupUI : MonoBehaviour
     {
         if (!waitingForCollect && mode == PopupMode.DoubleOrSkip)
             return;
+
+        AnalyticsEvents.Log("BF_" + analyticsScreen + "_Collect_Click");
 
         if (!rewardGranted)
         {

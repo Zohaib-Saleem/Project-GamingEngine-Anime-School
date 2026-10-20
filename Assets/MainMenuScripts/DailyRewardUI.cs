@@ -88,10 +88,12 @@ public class DailyRewardUI : MonoBehaviour
             return;
 
         DailyRewardData.CommitClaim(rewardAmounts);
+        AnalyticsEvents.Log("BF_MainMenu_DailyRewardDay" + (dayIndex + 1) + "_Claim");
         Refresh();
 
         if (claimPopup != null)
         {
+            claimPopup.analyticsScreen = "DailyReward";
             claimPopup.ShowDoubleOrSkipDailyReward(amount, null);
             return;
         }
@@ -104,6 +106,7 @@ public class DailyRewardUI : MonoBehaviour
         if (DailyRewardData.CanClaimToday())
             return;
 
+        AnalyticsEvents.Log("BF_MainMenu_DailyReward_Close");
         gameObject.SetActive(false);
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.OnDailyRewardClosed();

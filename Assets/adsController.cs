@@ -44,6 +44,16 @@ public class adsController : MonoBehaviour
             adsManager.ShowInterstitialWithLoading();
     }
 
+    // interstitial with an AF_ analytics event, logged only when the ad can actually be requested
+    public void ShowInter(string analyticsEvent)
+    {
+        if (adsManager == null)
+            return;
+        if (InterAllowed())
+            AnalyticsEvents.Log(analyticsEvent);
+        adsManager.ShowInterstitialWithLoading();
+    }
+
     public void ShowRewarded(System.Action onReward, bool canShowInterOnFallback = false)
     {
         if (adsManager == null)
@@ -51,11 +61,39 @@ public class adsController : MonoBehaviour
         adsManager.ShowRewardedWithLoading(onReward, canShowInterOnFallback);
     }
 
+    // rewarded ad with analytics: "<placement>_Watch" on request, "<placement>_Claim" when the reward is given
+    public void ShowRewarded(string analyticsPlacement, System.Action onReward, bool canShowInterOnFallback = false)
+    {
+        if (adsManager == null)
+            return;
+
+        AnalyticsEvents.Log(analyticsPlacement + "_Watch");
+        System.Action claim = () =>
+        {
+            AnalyticsEvents.Log(analyticsPlacement + "_Claim");
+            onReward?.Invoke();
+        };
+        adsManager.ShowRewardedWithLoading(claim, canShowInterOnFallback);
+    }
+
     public void TryShowInter(bool enabled)
     {
         if (!enabled || adsManager == null)
             return;
         adsManager.ShowInterstitialWithLoading();
+    }
+
+    void TryShowInter(bool enabled, string analyticsEvent)
+    {
+        if (!enabled || adsManager == null)
+            return;
+        ShowInter(analyticsEvent);
+    }
+
+    // same early-outs as AdsManager.ShowInterstitialWithLoading, so AF_ events match real ad requests
+    static bool InterAllowed()
+    {
+        return PlayerPrefs.GetInt("RemoveAds", 0) != 1 && PlayerPrefs.GetInt("RemoveAdsTimer", 0) != 1;
     }
 
     public void ShowDailyRewardBackInter()
@@ -83,34 +121,34 @@ public class adsController : MonoBehaviour
     {
         if (adsManager == null)
             return;
-        TryShowInter(adsManager.modeselectionad);
+        TryShowInter(adsManager.modeselectionad, "AF_LevelSelection_ModeInter_Show");
     }
 
     public void ShowLevelSelectInter()
     {
         if (adsManager == null)
             return;
-        TryShowInter(adsManager.levelselectad);
+        TryShowInter(adsManager.levelselectad, "AF_LevelSelection_LevelStartInter_Show");
     }
 
     public void ShowPauseButtonInter()
     {
         if (adsManager == null)
             return;
-        TryShowInter(adsManager.pausebuttonad);
+        TryShowInter(adsManager.pausebuttonad, "AF_GamePlay_PauseInter_Show");
     }
 
     public void ShowRemoveAdsPanelInter()
     {
         if (adsManager == null)
             return;
-        TryShowInter(adsManager.removeadspanelad);
+        TryShowInter(adsManager.removeadspanelad, "AF_ModeSelection_RemoveAdsInter_Show");
     }
 
     public void ShowFirstMissionCompleteInter()
     {
         if (adsManager == null)
             return;
-        TryShowInter(adsManager.firstmissioncompletead);
+        TryShowInter(adsManager.firstmissioncompletead, "AF_LevelComplete_Inter_Show");
     }
 }

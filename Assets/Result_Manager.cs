@@ -50,6 +50,8 @@ public class Result_Manager : MonoBehaviour
 
         Completed = true;
         CancelInvoke(nameof(GoForCompletion));
+        if (Level_Handler.instance != null)
+            Level_Handler.instance.LogMissionEvent("Complete");
 
         if (school_manager != null && school_manager.mainChUI != null)
             school_manager.mainChUI.SetActive(false);
@@ -90,7 +92,10 @@ public class Result_Manager : MonoBehaviour
 
         // Optional old popup flow stays disabled when in-panel reward buttons are set.
         if (showLevelRewardPopup && levelRewardPopup != null && rewardButtonsRoot == null)
+        {
+            levelRewardPopup.analyticsScreen = "LevelComplete";
             levelRewardPopup.ShowDoubleOrSkip(currentTotalReward, null);
+        }
     }
 
     public void OnClick2xReward()
@@ -100,7 +105,7 @@ public class Result_Manager : MonoBehaviour
 
         if (adsController.instance != null && adsController.instance.adsManager != null)
         {
-            adsController.instance.adsManager.ShowRewardedWithLoading(Grant2xReward, false);
+            adsController.instance.ShowRewarded("AF_LevelComplete_DoubleReward", Grant2xReward, false);
             return;
         }
 
@@ -125,6 +130,7 @@ public class Result_Manager : MonoBehaviour
             return;
 
         rewardDecisionDone = true;
+        AnalyticsEvents.Log("BF_LevelComplete_SkipReward_Click");
         CurrencyManager.AddCoins(currentTotalReward);
 
         // Next buttons panel first, then interstitial
@@ -134,7 +140,7 @@ public class Result_Manager : MonoBehaviour
             if (IsFirstMissionFromArray())
                 adsController.instance.ShowFirstMissionCompleteInter();
             else
-                adsController.instance.ShowInter();
+                adsController.instance.ShowInter("AF_LevelComplete_Inter_Show");
         }
     }
 
@@ -208,6 +214,8 @@ public class Result_Manager : MonoBehaviour
 
         failed = true;
         CancelInvoke(nameof(GoForFail));
+        if (Level_Handler.instance != null)
+            Level_Handler.instance.LogMissionEvent("Fail");
 
         if (school_manager != null && school_manager.mainChUI != null)
             school_manager.mainChUI.SetActive(false);

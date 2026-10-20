@@ -22,12 +22,14 @@ public class MenuExitUI : MonoBehaviour
 
     void OnYes()
     {
+        AnalyticsEvents.Log("BF_MainMenu_ExitYes_Click");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.ConfirmExitGame();
     }
 
     void OnNo()
     {
+        AnalyticsEvents.Log("BF_MainMenu_ExitNo_Click");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.CloseExitPanel();
     }

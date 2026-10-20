@@ -19,6 +19,7 @@ public class SplashSceneUI : MonoBehaviour
     void Start()
     {
         GameSettings.Load();
+        AnalyticsEvents.Log("GF_1_Splash_Open");
 
         if (fakeLoading != null)
             fakeLoading.SetActive(false);
@@ -32,6 +33,9 @@ public class SplashSceneUI : MonoBehaviour
     IEnumerator SplashRoutine()
     {
         yield return new WaitForSeconds(Mathf.Max(0.2f, splashTime));
+
+        if (PlayerPrefs.GetInt("RemoveAds", 0) != 1)
+            AnalyticsEvents.Log("AF_Splash_AppOpen_Show");
 
         if (adsController.instance != null && adsController.instance.adsManager != null)
             adsController.instance.adsManager.ShowAdMobAppOpenAtStart();

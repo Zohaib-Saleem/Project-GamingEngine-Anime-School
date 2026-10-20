@@ -1560,7 +1560,7 @@ if(IOS_InternetConnection)
 
     public void InterNet()
     {
-        if (!MyFirebase.Instance.IsInternet)
+        if (MyFirebase.Instance != null && !MyFirebase.Instance.IsInternet)
         {
             MyFirebase.Instance.InitializeFirebase();
 
@@ -2462,8 +2462,16 @@ if(IOS_InternetConnection)
                 new Firebase.Analytics.Parameter("value", revenue),
                 new Firebase.Analytics.Parameter("currency", "USD"), // All AppLovin revenue is sent in USD
             };
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("impressionCall");
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_impression", impressionParameters);
+            // a Firebase failure here must never break the ad callback
+            try
+            {
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("impressionCall");
+                Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_impression", impressionParameters);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning("Firebase ad_impression log failed: " + ex.Message);
+            }
 
         }
     }

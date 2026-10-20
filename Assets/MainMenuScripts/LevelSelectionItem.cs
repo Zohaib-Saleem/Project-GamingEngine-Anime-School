@@ -40,6 +40,7 @@ public class LevelSelectionItem : MonoBehaviour
 
     void OnPlay()
     {
+        AnalyticsEvents.Log("BF_LevelSelection_Level" + (levelIndex + 1).ToString("00") + "_Start");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.LoadGameplay(levelIndex);
     }
@@ -48,7 +49,10 @@ public class LevelSelectionItem : MonoBehaviour
     {
         if (adsController.instance != null)
         {
-            adsController.instance.ShowRewarded(OnRewardSuccess, false);
+            adsController.instance.ShowRewarded(
+                "AF_LevelSelection_UnlockLevel" + (levelIndex + 1).ToString("00"),
+                OnRewardSuccess,
+                false);
             return;
         }
 

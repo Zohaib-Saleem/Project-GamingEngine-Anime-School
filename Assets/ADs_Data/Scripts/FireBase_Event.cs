@@ -25,7 +25,7 @@ public class FireBase_Event : MonoBehaviour
 
     public void Log_FB_Event(string log)
     {
-      FirebaseAnalytics.LogEvent(log);
+      AnalyticsEvents.Log(log);
      LogDesignEvent(log);
     }
     public void Intser()
@@ -77,24 +77,24 @@ public class FireBase_Event : MonoBehaviour
     }
     public void MissionOrLevelStartedEventLog(string GameMode, int LevelNumber)
     {
-        FirebaseAnalytics.LogEvent("LevelStarted_" + GameMode + "_Level_" + LevelNumber.ToString());
+        AnalyticsEvents.Log("LevelStarted_" + GameMode + "_Level_" + LevelNumber.ToString());
       //  LogProgressionEvent(GAProgressionStatus.Start, "LevelStarted_" + GameMode + "_Level_" + LevelNumber);
     }
     public void MissionOrLevelFailEventLog(string GameMode, int LevelNumber)
     {
       //  LogProgressionEvent(GAProgressionStatus.Fail, "LevelFail_" + GameMode + "_Level_" + LevelNumber);
-        FirebaseAnalytics.LogEvent("LevelFail_" + GameMode + "_Level_" + LevelNumber.ToString());
+        AnalyticsEvents.Log("LevelFail_" + GameMode + "_Level_" + LevelNumber.ToString());
 
     }
 
     public void MissionOrLevelCompletedEventLog(string GameMode, int LevelNumber)
     {
-        FirebaseAnalytics.LogEvent("LevelComplete_" + GameMode + "_Level_" + LevelNumber);
+        AnalyticsEvents.Log("LevelComplete_" + GameMode + "_Level_" + LevelNumber);
        // LogProgressionEvent(GAProgressionStatus.Complete, "LevelComplete_" + GameMode + "_Level_" + LevelNumber);
     }
     public void MissionOrLevelPauseEventLog(string GameMode, int LevelNumber)
     {
-        FirebaseAnalytics.LogEvent("LevelPaused_" + GameMode + "_Level_" + LevelNumber);
+        AnalyticsEvents.Log("LevelPaused_" + GameMode + "_Level_" + LevelNumber);
     }
 
     // Example method to log a design event (e.g., player action)

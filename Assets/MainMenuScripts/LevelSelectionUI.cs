@@ -60,6 +60,7 @@ public class LevelSelectionUI : MonoBehaviour
 
     void OnBack()
     {
+        AnalyticsEvents.Log("BF_LevelSelection_Back_Click");
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.BackFromLevelSelect();
     }

@@ -43,6 +43,7 @@ public class MainMenuManager : MonoBehaviour
     bool pendingRemoveAdsOnModeSelect;
     bool pendingMainMenuStartInter;
     bool pendingModeSelectionInter;
+    bool screenLogged;
 
     void Awake()
     {
@@ -78,6 +79,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (dailyRewardPanel != null)
         {
+            AnalyticsEvents.Log("GF_3_DailyReward_Open");
             dailyRewardPanel.SetActive(true);
             if (DailyRewardUI.instance != null)
                 DailyRewardUI.instance.Refresh();
@@ -104,13 +106,13 @@ public class MainMenuManager : MonoBehaviour
 
             // First flow: ad after daily only when BOTH bools are true
             if (CanShowDailyRewardBackAd() && CanShowBeforeMainMenuAd())
-                ShowInterNow();
+                ShowInterNow("AF_MainMenu_DailyRewardInter_Show");
         }
         else
         {
             // Returning flow: only dailyrewardbackad
             if (CanShowDailyRewardBackAd())
-                ShowInterNow();
+                ShowInterNow("AF_MainMenu_DailyRewardInter_Show");
         }
     }
 
@@ -134,7 +136,10 @@ public class MainMenuManager : MonoBehaviour
     public void OpenAvatar()
     {
         if (avatarPanel != null)
+        {
+            AnalyticsEvents.Log("GF_4_AvatarSelection_Open");
             avatarPanel.SetActive(true);
+        }
     }
 
     public void OnAvatarSaved()
@@ -156,6 +161,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (profilePanel != null)
         {
+            AnalyticsEvents.Log("GF_5_Profile_Open");
             profilePanel.SetActive(true);
             if (ProfileUI.instance != null)
                 ProfileUI.instance.LoadFields();
@@ -177,7 +183,7 @@ public class MainMenuManager : MonoBehaviour
         {
             showInterAfterFirstProfile = false;
             if (CanShowDailyRewardBackAd() || CanShowBeforeMainMenuAd())
-                ShowInterNow();
+                ShowInterNow("AF_MainMenu_ProfileInter_Show");
         }
     }
 
@@ -195,10 +201,10 @@ public class MainMenuManager : MonoBehaviour
             && adsController.instance.adsManager.beforemainmenu;
     }
 
-    void ShowInterNow()
+    void ShowInterNow(string analyticsEvent)
     {
         if (adsController.instance != null)
-            adsController.instance.ShowInter();
+            adsController.instance.ShowInter(analyticsEvent);
     }
 
     public void OpenStore()
@@ -288,7 +294,10 @@ public class MainMenuManager : MonoBehaviour
             return;
 
         if (removeAdsPanel != null)
+        {
+            AnalyticsEvents.Log("BF_ModeSelection_RemoveAdsPanel_Open");
             removeAdsPanel.SetActive(true);
+        }
     }
 
     public void OnRemoveAdsPanelClosed()
@@ -384,6 +393,9 @@ public class MainMenuManager : MonoBehaviour
 
     void ShowScreenImmediate(MenuScreen screen)
     {
+        if (!screenLogged || screen != currentScreen)
+            LogScreenOpen(screen);
+        screenLogged = true;
         currentScreen = screen;
         if (exitPanel != null)
             exitPanel.SetActive(false);
@@ -395,6 +407,16 @@ public class MainMenuManager : MonoBehaviour
 
         if (screen == MenuScreen.LevelSelect && LevelSelectionUI.instance != null)
             LevelSelectionUI.instance.Refresh();
+    }
+
+    static void LogScreenOpen(MenuScreen screen)
+    {
+        switch (screen)
+        {
+            case MenuScreen.Home: AnalyticsEvents.Log("GF_2_MainMenu_Open"); break;
+            case MenuScreen.ModeSelect: AnalyticsEvents.Log("GF_6_ModeSelection_Open"); break;
+            case MenuScreen.LevelSelect: AnalyticsEvents.Log("GF_7_LevelSelection_Open"); break;
+        }
     }
 
     static void SetPanel(GameObject panel, bool active)

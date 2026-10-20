@@ -78,24 +78,60 @@ public class MyFirebase : MonoBehaviour
         }
     }
 
+    bool initializing;
+
     public void InitializeFirebase()
     {
-        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        // ads code calls this again whenever remote config hasn't loaded yet:
+        // once Firebase is up only retry the fetch, and never stack init calls
+        if (isFirebaseInitialized)
         {
-            var dependencyStatus = task.Result;
-            if (dependencyStatus == Firebase.DependencyStatus.Available)
+            remoteFetch();
+            return;
+        }
+        if (initializing)
+            return;
+        initializing = true;
+
+        try
+        {
+            Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
             {
-                app = Firebase.FirebaseApp.DefaultInstance;
-                isFirebaseInitialized = true;
-                Debug.Log("Firebase is initialized successfully!");
-                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
-                remoteFetch();
-            }
-            else
-            {
-                Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
-            }
-        });
+                initializing = false;
+                try
+                {
+                    if (task.IsFaulted || task.IsCanceled)
+                    {
+                        Debug.LogWarning("Firebase dependency check failed: " + task.Exception);
+                        return;
+                    }
+
+                    var dependencyStatus = task.Result;
+                    if (dependencyStatus == Firebase.DependencyStatus.Available)
+                    {
+                        app = Firebase.FirebaseApp.DefaultInstance;
+                        isFirebaseInitialized = true;
+                        Debug.Log("Firebase is initialized successfully!");
+                        FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+                        AnalyticsEvents.SetFirebaseReady();
+                        remoteFetch();
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning("Firebase initialization error: " + ex.Message);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            initializing = false;
+            Debug.LogWarning("Firebase initialization could not start: " + ex.Message);
+        }
     }
 
     public void remoteFetch()

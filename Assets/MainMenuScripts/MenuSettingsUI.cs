@@ -29,17 +29,29 @@ public class MenuSettingsUI : MonoBehaviour
         if (gfxLowButton != null)
         {
             gfxLowButton.onClick.RemoveAllListeners();
-            gfxLowButton.onClick.AddListener(() => GameSettings.SetGraphics(0, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight));
+            gfxLowButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_Settings_GfxLow_Select");
+                GameSettings.SetGraphics(0, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight);
+            });
         }
         if (gfxMediumButton != null)
         {
             gfxMediumButton.onClick.RemoveAllListeners();
-            gfxMediumButton.onClick.AddListener(() => GameSettings.SetGraphics(1, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight));
+            gfxMediumButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_Settings_GfxMedium_Select");
+                GameSettings.SetGraphics(1, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight);
+            });
         }
         if (gfxHighButton != null)
         {
             gfxHighButton.onClick.RemoveAllListeners();
-            gfxHighButton.onClick.AddListener(() => GameSettings.SetGraphics(2, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight));
+            gfxHighButton.onClick.AddListener(() =>
+            {
+                AnalyticsEvents.Log("BF_Settings_GfxHigh_Select");
+                GameSettings.SetGraphics(2, gfxLowHighlight, gfxMediumHighlight, gfxHighHighlight);
+            });
         }
     }
 
@@ -52,6 +64,7 @@ public class MenuSettingsUI : MonoBehaviour
 
     void SaveAndClose()
     {
+        AnalyticsEvents.Log("BF_Settings_Save_Click");
         PlayerPrefs.Save();
         if (MainMenuManager.instance != null)
             MainMenuManager.instance.CloseSettings();

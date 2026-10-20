@@ -42,6 +42,7 @@ public class AnimeSchoolManager : MonoBehaviour
     }
     public void RideCycle()
     {
+        AnalyticsEvents.Log("BF_GamePlay_Bike_Enter");
         SimpleBike bike = TriggeredCycle.GetComponent<SimpleBike>();
         bike.SetParked(false);
         bike.enabled = true;
@@ -68,6 +69,7 @@ public class AnimeSchoolManager : MonoBehaviour
     }
     public void ExitCycleRide()
     {
+        AnalyticsEvents.Log("BF_GamePlay_Bike_Exit");
         if (TriggeredCycle != null)
         {
             SimpleBike bike = TriggeredCycle.GetComponent<SimpleBike>();

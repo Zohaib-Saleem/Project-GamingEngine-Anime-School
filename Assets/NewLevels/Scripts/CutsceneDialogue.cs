@@ -556,6 +556,7 @@ public class CutsceneDialogue : MonoBehaviour
         if (director == null || director.state != PlayState.Playing)
             return;
 
+        AnalyticsEvents.Log("BF_GamePlay_Cutscene_Skip");
         StopVoice();
         director.time = director.duration;
         director.Evaluate();

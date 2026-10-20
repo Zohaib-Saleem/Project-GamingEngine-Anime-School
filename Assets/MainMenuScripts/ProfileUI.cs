@@ -41,6 +41,7 @@ public class ProfileUI : MonoBehaviour
 
     void OnSave()
     {
+        AnalyticsEvents.Log("BF_MainMenu_Profile_Save");
         string name = nameInput != null ? nameInput.text : string.Empty;
         string age = ageInput != null ? ageInput.text : string.Empty;
 
